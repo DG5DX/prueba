@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Álbumes</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <header>
+        <h1>Tienda de Álbumes</h1>
+        <div id="Carrito">
+            <button id="Carrito-Btn">Carrito <span id="carrito-count">0</span></button>
+            <div id="Carrito-Contenido" class="hidden">
+                <button class="Cerrar" onclick="CerrarCarrito()">&times;</button>
+                <table id="Tabla-Carrito">
+                    <thead>
+                        <tr>
+                            <th>Portada</th>
+                            <th>Producto</th>
+                            <th>Artista</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                            <th>Borrar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <button id="Limpiar-Carrito">Limpiar Carrito</button>
+                <p id="Precio-Total">Total <span id="total">$0.00</span></p>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div id="Artistas">
+            <div class="Artista-Card">
+                <h3>The Beatles</h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Beatles_logo.svg/200px-Beatles_logo.svg.png" alt="The Beatles">
+                <button class="Artista-Btn" data-artista="The Beatles">Ver Discografía</button>
+            </div>
+            <div class="Artista-Card">
+                <h3>The Strokes</h3>
+                <img src="https://seeklogo.com/images/T/the-strokes-logo-6C9B1BA384-seeklogo.com.png" alt="The Strokes">
+                <button class="Artista-Btn" data-artista="The Strokes">Ver Discografía</button>
+            </div>
+            <div class="Artista-Card">
+                <h3>Blur</h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Blur_%28Logo%29.png" alt="Blur">
+                <button class="Artista-Btn" data-artista="Blur">Ver Discografía</button>
+            </div>
+            <div class="Artista-Card">
+                <h3>Gorillaz</h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Gorillaz_logo.svg/2560px-Gorillaz_logo.svg.png" alt="Gorillaz">
+                <button class="Artista-Btn" data-artista="Gorillaz">Ver Discografía</button>
+            </div>
+            <div class="Artista-Card">
+                <h3>Daft Punk</h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Daft_Punk_logo.svg/2560px-Daft_Punk_logo.svg.png" alt="Daft Punk">
+                <button class="Artista-Btn" data-artista="Daft Punk">Ver Discografía</button>
+            </div>
+            <div class="Artista-Card">
+                <h3>Justice</h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Justice_%28Logo%29.png" alt="Justice">
+                <button class="Artista-Btn" data-artista="Justice">Ver Discografía</button>
+            </div>
+            <div class="Artista-Card">
+                <h3>Red Hot Chili Peppers</h3>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Red_Hot_Chili_Peppers_logo.png/150px-Red_Hot_Chili_Peppers_logo.png" alt="The Strokes">
+                <button class="Artista-Btn" data-artista="Red Hot Chili Peppers">Ver Discografía</button>
+            </div>
+            <div class="Artista-Card">
+                <h3>Travis Scott</h3>
+                <img src="https://1000logos.net/wp-content/uploads/2021/11/Cactus-Jack-Symbol.png" alt="The Strokes">
+                <button class="Artista-Btn" data-artista="Travis Scott">Ver Discografía</button>
+            </div>
+            <div class="Artista-Card">
+                <h3>MF DOOM</h3>
+                <img src="https://www.pngitem.com/pimgs/m/129-1297835_mf-doom-logo-png-transparent-png.png" alt="The Strokes">
+                <button class="Artista-Btn" data-artista="MF DOOM">Ver Discografía</button>
+            </div>
+            <div class="Artista-Card">
+                <h3>YE</h3>
+                <img src="https://logos-world.net/wp-content/uploads/2023/05/Kanye-West-Logo-2005.png" alt="The Strokes">
+                <button class="Artista-Btn" data-artista="YE">Ver Discografía</button>
+            </div>
+        </div>
+        <div id="Discografia-Contenido" class="hidden">
+            <button class="Cerrar" onclick="CerrarDiscografia()">&times;</button>
+            <div id="Discografia">
+            </div>
+        </div>
+        <div id="Info-Contacto">
+            <div>
+            <h2>Información de Contacto</h2>
+            <p>Correo: dafecani@gmail.com</p>
+            <p>Teléfono: +57 304 3526113</p>
+            </div>
+            <div>
+            <h3>Métodos de Pago</h3>
+            <p>Aceptamos las siguientes formas de pago:</p>
+            <ul>
+                <li>Tarjeta de Crédito/Débito</li>
+                <li>PayPal</li>
+                <li>Nequi</li>
+                <li>Transferencia Bancaria</li>
+            </ul>
+            </div>
+        </div>
+    </main>
+    <script>
+        const carrito = [];
+        const discografias = {
+            'The Beatles': [
+                { nombre: 'Please Please Me', precio: 29.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02dbeec63ad914c973e75c24df', canciones: ['I Saw Her Standing There', 'Misery', ' Anna (Go to Him)', 'Chains', 'Boys', 'Boys', 'Ask Me Why', 'Please Pelase Me', 'Love Me Do', 'P. S. I Love You', 'Do You Want To Know A Secret?', 'A Taste Of Honey', 'There´s A Place', 'Twist & Shout'] },
+                { nombre: 'With The Beatles', precio: 25.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02608a63ad5b18e99da94a3f73', canciones: ['It Won´t Be Long', 'All I´ve Got to Do', 'All My Loving', 'Don´t Bother Me', 'Little Child', 'Till There Was You', 'Please Mister Postman', 'Roll Over Beethoven', 'Hold Me Tight', 'You Really Got a Hold on Me', 'I Wanna Be Your Man', 'Devil in Her Heart', 'Not a Second Time', 'Money (That´s What I Want)'] },
+                { nombre: 'A Hard Day´s Night', precio: 27.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02e230f303815e82a86713eedd', canciones: ['A Hard Day´s Night', 'I Should Have Known Better', 'If I Fell','I´m Happy Just to Dance with You', 'And I Love Her', 'Tell Me Why', 'Can´t Buy Me Love', 'Any Time at All', 'I´ll Cry Instead', 'Things We Said Today', 'When I Get Home', 'You Can´t Do That', 'I´ll Be Back'] },
+                { nombre: 'Beatles for Sale', precio: 15.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0255612ece447bec5d62c68375', canciones: ['No Reply', 'I´m a Loser', 'Baby´s in Black', 'Rock & Roll Music', 'I´ll Follow the Sun', 'Mister Moonlight', 'Kansas City/Hey-Hey-Hey-Hey', 'Eight Days a Week', 'Words of Love', 'Honey Don´t', 'Every Little Thing', 'I Don´t Want to Spoil the Party', 'What You´re Doing', 'Everybody´s Trying to Be My Baby'] },
+                { nombre: 'Help!', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02e3e3b64cea45265469d4cafa', canciones: ['Help!', 'The Night Before', 'You´ve Got to Hide Your Love Away', 'I Need You', 'Another Girl', 'You´re Going to Lose That Girl', 'Ticket to Ride', 'Act Naturally', 'It´s Only Love', 'You Like Me Too Much', 'Tell Me What You See', 'I´ve Just Seen a Face', 'Yesterday', 'Dizzy Miss Lizzy'] },
+                { nombre: 'Rubber Soul', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02ed801e58a9ababdea6ac7ce4', canciones: ['Drive My Car', 'Norwegian Wood (This Bird Has Flown)', 'You Won´t See Me', 'Nowhere Man', 'Think for Yourself', 'The Word', 'Michelle', 'What Goes On', 'Girl', 'I´m Looking Through You', 'In My Life', 'Wait', 'If I Needed Someone', 'Run for Your Life'] },
+                { nombre: 'Revolver', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0228b8b9b46428896e6491e97a', canciones: ['Taxman', 'Eleanor Rigby', 'I´m Only Sleeping', 'Love You To', 'Here, There and Everywhere', 'Yellow Submarine', 'She Said She Said', 'Good Day Sunshine', 'And Your Bird Can Sing', 'For No One', 'Doctor Robert', 'I Want to Tell You', 'Got to Get You into My Life', 'Tomorrow Never Knows'] },
+                { nombre: 'Sgt. Pepper´s Lonely Hearts Club Band', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0234ef8f7d06cf2fc2146f420a', canciones: ['Sgt. Pepper´s Lonely Hearts Club Band', 'With a Little Help from My Friends', 'Lucy in the Sky with Diamonds', 'Getting Better', 'Fixing a Hole', 'She´s Leaving Home', 'Being for the Benefit of Mr. Kite!', 'Within You Without You', 'When I´m Sixty-Four', 'Lovely Rita', 'Good Morning Good Morning', 'Sgt. Pepper´s Lonely Hearts Club Band (Reprise)', 'A Day in the Life'] },
+                { nombre: 'Magical Mystery Tour', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02692d9189b2bd75525893f0c1', canciones: ['Magical Mystery Tour', 'The Fool on the Hill', 'Flying', 'The Fool on the Hill', 'Flying', 'Blue Jay Way', 'Your Mother Should Know', 'I Am the Walrus', 'Hello Goodbye', 'Strawberry Fields Forever', 'Penny Lane', 'Baby You´re a Rich Man', 'All You Need Is Love'] },
+                { nombre: 'The BEATLES', precio: 45.99, imagen: 'https://i.scdn.co/image/ab67616d00001e024ce8b4e42588bf18182a1ad2', canciones: ['Back in the U.S.S.R.', 'Dear Prudence', 'Glass Onion', 'Ob-La-Di, Ob-La-Da', 'Wild Honey Pie', 'The Continuing Story of Bungalow Bill', 'While My Guitar Gently Weeps', 'Happiness is a Warm Gun', 'Martha My Dear', 'I´m So Tired', 'Blackbird', 'Piggies', 'Rocky Raccoon', 'Don´t Pass Me By', 'Why Don´t We Do It in the Road?', 'I Will', 'Julia', 'Birthday', 'Yer Blues', 'Mother Nature´s Son', 'Everybody´s Got Something to Hide Except Me and My Monkey', 'Sexy Sadie', 'Helter Skelter', 'Long, Long, Long', 'Revolution 1', 'Honey Pie', 'Savoy Truffle', 'Cry Baby Cry', 'Revolution 9', 'Good Night' ] },
+                { nombre: 'Abbey Road', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02dc30583ba717007b00cceb25', canciones: ['Come Together', 'Something', 'Maxwell´s Silver Hammer', 'Oh! Darling', 'Octopus´s Garden', 'I Want You (She´s So Heavy)', 'Here Comes the Sun', 'Because', 'You Never Give Me Your Money', 'Sun King', 'Mean Mr. Mustard', 'Polythene Pam', 'She Came In Through the Bathroom Window', 'Golden Slumbers', 'Carry That Weight', 'The End', 'Her Majesty'] },
+                { nombre: 'Let It Be', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0284243a01af3c77b56fe01ab1', canciones: ['One After 909', 'Rocker', 'Save the Last Dance for Me', 'Don´t Let Me Down', 'Dig a Pony', 'I´ve Got a Feeling', 'Get Back', 'For You Blue', 'Teddy Boy', 'Two of Us', 'Maggie Mae', 'Dig It', 'Let It Be', 'The Long and Winding Road', 'Get Back'] },
+            ],
+            'The Strokes': [
+                { nombre: 'Is This It', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02a388a3f20d1bf2123249cc79', canciones: ['Is This It', 'The Modern Age', 'Soma', 'Barely Legal', 'Someday', 'Alone, Together', 'Last Nite', 'Hard to Explain', 'New York City Cops', 'Trying Your Luck', 'Take It or Leave It'] },
+                { nombre: 'Room on Fire', precio: 22.99, imagen: 'https://i.scdn.co/image/ab67616d00001e020f35726025e0f025da4c688f', canciones: ['What Ever Happened?', 'Reptilia', 'Automatic Stop', '12:51', 'You Talk Way Too Much', 'Between Love & Hate', 'Meet Me in the Bathroom', 'Under Control', 'The Way It Is', 'The End Has No End', 'I Can´t Win'] },
+                { nombre: 'First Impressions of Earth', precio: 27.99, imagen: 'https://i.scdn.co/image/ab67616d00001e026898a982ff3c6049ba52586c', canciones: ['You Only Live Once', 'Juicebox', 'Heart in a Cage', 'Razorblade', 'On the Other Side', 'Vision of Division', 'Ask Me Anything', 'Electricityscape', 'Killing Lies', 'Fear of Sleep', '15 Minutes', 'Ize of the World', 'Evening Sun', 'Red Light'] },
+                { nombre: 'Angles', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02397d02cfe1aab2923f9d1697', canciones: ['Machu Picchu', 'Under Cover of Darkness', 'Two Kinds of Happiness', 'You´re So Right', 'Taken for a Fool', 'Games', 'Call Me Back', 'Gratisfaction', 'Metabolism', 'Life is Simple in the Moonlight'] },
+                { nombre: 'Comedown Machine', precio: 27.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02f07ef193e0bb6a238ea37f0a', canciones: ['Tap Out', 'All the Time', 'One Way Trigger', 'Welcome to Japan', '80´s Comedown Machine', '50/50', 'Slow Animals', 'Partners In Crime', 'Chances', 'Happy Ending', 'Call It Fate, Call It Karma'] },
+                { nombre: 'The New Abnormal', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02bfa99afb5ef0d26d5064b23b', canciones: ['The Adults Are Talking', 'Selfless', 'Brooklyn Bridge to Chorus', 'Bad Decisions', 'Eternal Summer', 'At The Door', 'Why Are Sundays So Depressing?', 'Not the Same Anymore', 'Ode To The Mets'] },
+            ],
+            'Blur': [
+                { nombre: 'Leisure', precio: 19.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0272bde512e9cdcace2dec2571', canciones: ['She´s So High', 'Bang', 'Slow Down', 'Repetition', 'Bad Day', 'Sing', 'There´s No Other Way', 'Fool', 'Come Together', 'High Cool', 'Birthday', 'Wear Me Down'] },
+                { nombre: 'Modern Life Is Rubbish', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e028d1e9652358d8c436dd5c746', canciones: ['For Tomorrow', 'Advert', 'Colin Zeal','Pressure on Julian', 'Star Shaped', 'Blue Jeans', 'Chemical World', 'Intermission', 'Sunday Sunday', 'Oily Water', 'Miss America', 'Villa Rosie', 'Coping', 'Turn It Up', 'Resigned', 'Commercial Break'] },
+                { nombre: 'Parklife', precio: 29.99, imagen: 'https://i.scdn.co/image/ab67616d00001e027f04eef099ddb5c34a1f3afc', canciones: ['Girls & Boys', 'Tracy Jacks', 'End of a Century','Parklife', 'Bank Holiday', 'Badhead', 'The Debt Collector', 'Far Out', 'To the End', 'London Loves', 'Trouble in the Message Centre', 'Clover Over Dover', 'Magic America', 'Jubilee', 'This Is a Low', 'Lot 105'] },
+                { nombre: 'The Great Escape', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02d2076e92f4d4bcef3c9722d6', canciones: ['Stereotypes', 'Country House', 'Best Days','Charmless Man', 'Fade Away', 'Top Man', 'The Universal', 'Mr. Robinson´s Quango', 'He Thought of Cars', 'It Could Be You', 'Ernold Same', 'Globe Alone', 'Dan Abnorma', 'Entertain Me', 'Yuko and Hiro'] },
+                { nombre: 'Blur', precio: 35.99, imagen: 'https://i.scdn.co/image/ab67616d00001e024baa9746d93e7cc8b3beca61', canciones: ['Beetlebum', 'Song 2', 'Country Sad Ballad Man', 'M.O.R.', 'On Your Own', 'Theme from Retro', 'You´re So Great', 'Death of a Party', 'Chinese Bombs', 'I´m Just a Killer for Your Love', 'Look Inside America', 'Strange News from Another Star', 'Movin´ On', 'Essex Dogs'] },
+                { nombre: '13', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0294983882a5effd77742a9f52', canciones: ['Tender', 'Bugman', 'Coffee & TV', 'Swamp Song', '1992', 'B.L.U.R.E.M.I.', 'Battle', 'Mellow Song', 'Trailerpark', 'Caramel', 'Trimm Trabb', 'No Distance Left to Run', 'Optigan 1'] },
+                { nombre: 'Think Tank', precio: 35.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02dc4348d07a51d47cc13e6116', canciones: ['Ambulance', 'Out of Time', 'Crazy Beat', 'Good Song', 'On the Way to the Club', 'Brothers and Sisters', 'Caravan', 'We´ve Got a File on You', 'Moroccan Peoples Revolutionary Bowls Club', 'Sweet Song', 'Jets', 'Gene by Gene', 'Battery in Your Leg'] },
+                { nombre: 'The Magic Whip', precio: 35.99, imagen: 'https://i.scdn.co/image/ab67616d00001e029dd4e688b220635941abfad4', canciones: ['Lonesome Street', 'New World Towers', 'Go Out', 'Ice Cream Man', 'Thought I Was a Spaceman', 'I Broadcast', 'My Terracotta Heart', 'There Are Too Many of Us', 'Ghost Ship', 'Pyongyang', 'Ong Ong', 'Mirrorball'] },
+                { nombre: 'The Ballad Of Darren', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02fc24d1ba493032a046ffd68a', canciones: ['The Ballad', 'St Charles Square', 'Barbaric', 'Russian Strings', 'The Everglades (For Leonard)', 'The Narcissist', 'Goodbye Albert', 'Far Away Island', 'Avalon', 'The Heights', 'The Rabbit', 'The Swan'] },
+            ],
+            'Gorillaz': [
+                { nombre: 'Gorillaz', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02f6c46838e4425ea96e2562fe', canciones: ['Re-Hash', '5/4', 'Tomorrow Comes Today', 'New Genious (Brother)', 'Clint Eastwood', 'Man Research (Clapper)', 'Punk', 'Sound Check (Gravity)', 'Double Bass', 'Rock the House', '19-2000', 'Latin Simone (¿Qué Pasa Contigo?)', 'Starshine', 'Slow Country', 'M1 A1' ] },
+                { nombre: 'G-Sides', precio: 25.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02476f0549bef8496dd021c8f4', canciones: ['19-2000 (Soulchild Remix)', 'Dracula', 'Rock the House (Radio Edit)', 'The Sounder (Edit)', 'Faust', 'Clint Eastwood (Phi Life Cypher Version', 'Ghost Train', 'Hip Albatross', 'Left Hand Suzuki Method', '12D3' ] },
+                { nombre: 'Demon Days', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0219d85a472f328a6ed9b704cf', canciones: ['Intro', 'Last Living Souls', 'Kids with Guns', 'O Green World', 'Dirty Harry', 'Feel Good Inc.', 'El Mañana', 'Every Planet We Reach Is Dead', 'November Has Come', 'All Alone', 'White Light', 'DARE', 'Fire Coming Out of the Monkey´s Head', 'Don´t Get Lost in Heaven', 'Demon Days' ] },
+                { nombre: 'D-Sides', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02efb135bbd7001e8ad73c7f72', canciones: ['68 State', 'People', 'Hongkongaton', 'We Are Happy Landfill', 'Hong Kong', 'Highway (Under Construction)', 'Rockit', 'Bill Murray', 'The Swagga', 'Murdoc Is God', 'Spitting Out the Demons', 'Don´t Get Lost in Heaven (Demo)', 'Stop the Dams', 'DARE (DFA remix)', 'Feel Good Inc. (Stanton Warriors remix)', 'Kids with Guns (Jamie T´s Turns to Monsters mix)', 'DARE (Soulwax remix)', 'Kids with Guns (Hot Chip remix)', 'El mañana (Metronomy remix)', 'DARE (Junior Sanchez remix)', 'Dirty Harry (Schtung Chinese New Year remix)', 'Kids with Guns (Quiet Village remix)'] },
+                { nombre: 'Plastic Beach', precio: 59.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02661d019f34569f79eae9e985', canciones: ['Orchestral Intro', 'Welcome to the World of the Plastic Beach', 'White Flag', 'Rhinestone Eyes', 'Stylo', 'Superfast Jellyfish', 'Empire Ants', 'Glitter Freeze', 'Some Kind of Nature', 'On Melancholy Hill', 'Broken', 'Sweepstakes', 'Plastic Beach', 'To Binge', 'Cloud of Unknowing', 'Pirate Jet'] },
+                { nombre: 'The Fall', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02bfcb1c9ce002a2c2cd5e9f34', canciones: ['Phoner To Arizona', 'Revolving Doors', 'Hillbilly Man', 'Detroit', 'Shy-town', 'Little Pink Plastic Bags', 'The Joplin Spider', 'The Parish Of Space Dust', 'The Snake In Dallas', 'Amarillo', 'The Speak It Mountains', 'Aspen Forest', 'Bobby In Phoenix', 'California And The Slipping Of The Sun', 'Seattle Yode'] },
+                { nombre: 'Humanz', precio: 48.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02a5952c0e2e649f588603b743', canciones: ['Intro: I Switched My Robot Off', 'Ascension', 'Strobelite', 'Saturnz Barz', 'Momentz', 'Interlude: The Non-Conformist Oath', 'Submission', 'Charger', 'Interlude: Elevator Going Up', 'Andromeda', 'Busted and Blue', 'Interlude: Talk Radio', 'Carnival', 'Let Me Out', 'Interlude: Penthouse', 'Sex Murder Party', 'She´s My Collar', 'Interlude: The Elephant', 'Hallelujah Money', 'We Got The Power'] },
+                { nombre: 'The Now Now', precio: 43.99, imagen: 'https://i.scdn.co/image/ab67616d00001e024d9f7b88e82db31d13ac6668', canciones: ['Humility', 'Tranz', 'Hollywood', 'Kansas', 'Sorcererz', 'Idaho', 'Lake Zurich', 'Magic City', 'Fire Flies', 'One Percent', 'Souk Eye'] },
+                { nombre: 'Song Machine', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0205a3c11cb2cb7c60d30316a3', canciones: ['Strange Timez', 'The Valley of the Pagans', 'The Lost Chord', 'Pac-Man', 'Chalk Tablet Towers', 'The Pink Phantom', 'Aries', 'Friday 13th', 'Dead Butterflies', 'Desolé', 'Momentary Bliss'] },
+                { nombre: 'Cracker Island', precio: 55.99, imagen: 'https://i.scdn.co/image/ab67616d00001e024b0ddebba0d5b34f2a2f07a4', canciones: ['Cracker Island', 'Oil', 'The Tired Influencer', 'Silent Running', 'New Gold', 'Baby Queen', 'Tarantula', 'Tormenta', 'Skinny Ape', 'Possession Island'] },
+            ],
+            'Daft Punk': [
+                { nombre: 'Homework', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e028ac778cc7d88779f74d33311', canciones: ['Daftendirekt', 'WDPK 83.7 FM', 'Revolution 909', 'Da Funk', 'Phoenix', 'Fresh', 'Around the World', 'Rollin´ & Scratchin´', 'Teachers', 'High Fidelity', 'Rock´n Roll', 'Oh Yeah', 'Burnin´', 'Indo Silver Club', 'Alive', 'Funk Ad'] },
+                { nombre: 'Homework (25th Anniversary Edition)', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0287aa91b6ba6b4fded7bf3293', canciones: ['Around the World - I:Cube Remix', 'Revolution 909 - Roger Sanchez & Junior Sanchez Remix', 'Around the World - Tee´s Frozen Sun Mix', 'Around the World - Mellow Mix', 'Burnin´ - DJ Sneak Main Mix', 'Around the World - Kenlou Mix', 'Burnin´ - Ian Pooley Cut up Mix', 'Around the World - Motorbass Vice Mix', 'Around the World - M.A.W Remix', 'Burnin´ - Slam Mix', 'Around the World - Original Lead On Mix', 'Burnin´ - DJ Sneak Mongowarrier Mix', 'Around the World - RAW Dub', 'Teachers - Extended Mix', 'Revolution 909 - Revolution A Capella'] },
+                { nombre: 'Discovery', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0248905438b9c1153978d9fbf4', canciones: ['One More Time', 'Aerodynamic', 'Digital Love', 'Harder, Better, Faster, Stronger', 'Crescendolls', 'Nightvision', 'Superheroes', 'High Life', 'Something About Us', 'Voyager', 'Veridis Quo', 'Short Circuit', 'Face to Face', 'Too Long'] },
+                { nombre: 'Daft Club', precio: 35.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02662ca2ebec199607ebf37ce0', canciones: ['Ouverture', 'Aerodynamic (Daft Punk Remix)', 'Harder, Better, Faster, Stronger (The Neptunes Remix)', 'Face to Face (Cosmo Vitelli Remix)', 'Phoenix (Basement Jaxx Remix)', 'Digital Love (Boris Dlugosch Remix)', 'Harder, Better, Faster, Stronger (Jess & Crabbe Remix)', 'Face to Face (Demon Remix)', 'Crescendolls (Laidback Luke Remix)', 'Aerodynamic (Slum Village Remix)', 'Too Long (Gonzales Version)', 'Aerodynamite', 'One More Time (Romanthony´s Unplugged)', 'Something About Us'] },
+                { nombre: 'Human After All', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e022ed719bad67261c7bf090c70', canciones: ['Human After All', 'The Prime Time of Your Life', 'Robot Rock', 'Steam Machine', 'Make Love', 'The Brainwasher', 'On/Off', 'Television Rules the Nation', 'Technologic', 'Emotion'] },
+                { nombre: 'Human After All (Remixes)', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0285441f50297029e82ae5c01c', canciones: ['Robot Rock (Soulwax Remix)', 'Human After All (SebastiAn Remix)', 'Technologic (Peaches No Logic Remix)', 'Brainwasher (Erol Alkan´s Horrorhouse dub) ', 'Prime Time of Your Life (Para One Remix) ', 'Human After All («Guy-Man After All» Justice Remix)', 'Technologic (Digitalism´s Highway to Paris Remix) ', 'Human After All (Alter Ego Remix)', 'Technologic (Vitalic Remix)', 'Robot Rock (Daft Punk Maximum Overdrive mix)'] },
+                { nombre: 'Tron: Legacy', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e028323143296ff7b2801e32789', canciones: ['Overture', 'The Grid', 'The Son of Flynn', 'Recognizer', 'Armory', 'Arena', 'Rinzler', 'The Game Has Changed', 'Outlands', 'Adagio for Tron', 'Nocturne', 'End of Line', 'Derezzed', 'Fall', 'Solar Sailer', 'Rectifier', 'Disc Wars', 'C.L.U', 'Arrival', 'Flynn Lives', 'Tron Legacy (End Titles)', 'Finale', 'Sea of Simulation', 'ENCOM, Part I', 'ENCOM, Part II', 'Castor', 'Reflections', 'Sunrise Prelude'] },
+                { nombre: 'Tron: Legacy Reconfigured', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0226597c053b38c9cf93f8f3a9', canciones: ['Derezzed (The Glitch Mob)', 'Fall (M83 vs. Big Black Delta)', 'The Grid (The Crystal Method)', 'Adagio for Tron (Teddybears)', 'The Son of Flynn (Ki:Theory)', 'C.L.U. (Paul Oakenfold)', 'The Son of Flynn (Moby)', 'End of Line (Boys Noize)', 'Rinzler (Kaskade)', 'ENCOM, Part II (Com Truise)', 'End of Line (Photek*)', 'Arena (The Japanese Popstars)', 'Derezzed (Avicii)', 'Solar Sailer (Pretty Lights)', 'Tron Legacy (End Titles) (Sander Kleinenberg)'] },
+                { nombre: 'Random Access Memories', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02efbba7082b953018c0da26e3', canciones: ['Give Life Back to Music', 'The Game of Love', 'Giorgio by Moroder', 'Within', 'Instant Crush', 'Lose Yourself to Dance', 'Touch', 'Get Lucky', 'Beyond', 'Motherboard', 'Fragments of Time', 'Doin´ It Right', 'Contact'] },
+                { nombre: 'Random Access Memories (10th Anniversary Edition)', precio: 70.99, imagen: 'https://i.scdn.co/image/ab67616d00001e023c196ec7c5344d654ff552e9', canciones: ['Horizon Ouverture', 'Horizon (Japan CD)', 'GLBTM (Studio Outtakes)', 'Infinity Repeating (2013 Demo)', 'GL (Early Take)', 'Prime (2012 Unfinished)', 'LYTD (Vocoder Tests)', 'The Writing of Fragments of Time', 'Touch (2021 Epilogue)',] },
+                { nombre: 'Alive 1887', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e025dd98587c9d9e1e4cab11cb4', canciones: ['Daftendirekt / Da Funk', 'Daftendirekt Interlude', 'Arnold Van Helden´s "Ten Minutes of Funk"', 'Rollin´ N´ Scratchin´', 'WDPK Pt. 1', 'WDPK Pt. 2', 'Alive'] },
+                { nombre: 'Alive 2007', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02673288fb985e5c194536ae27', canciones: ['Robot Rock / Oh Yeah', 'Touch It / Technologic', 'Television Rules The Nation / Crescendolls', 'Too Long / Steam Machine', 'Around the World / Harder, Better, Faster, Stronger', 'Burnin´ / Too Long', 'Face to Face / Short Circuit', 'One More Time / Aerodynamic', 'Aerodynamic Beats / Forget About the World', 'Prime Time of Your Life / Brainwasher / Rollin´ & Scratchin´ / Alive', 'Da Funk / Daftendirekt', 'Superheroes / Human After All / Rock´n Roll', 'Human After All / Together / One More Time (Reprise) / Music Sounds Better with You'] },
+            ],
+            'Justice': [
+                { nombre: 'Cross', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e021c0bcf8b536295438d26c70d', canciones: ['Genesis', 'Let There Be Light', 'D.A.N.C.E.', 'Newjack', 'Phantom', 'Phantom Pt. II', 'Valentine', 'TTHHEE PPAARRTTYY', 'DVNO', 'Stress', 'Waters of Nazareth', 'One Minute to Midnight'] },
+                { nombre: 'A Cross the Universe', precio: 35.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02609c6159deccae5151b7dafa', canciones: ['Intro', 'Genesis', 'Phantom Pt. 1', 'Phantom Pt. 1.5', 'D.A.N.C.E.', 'D.A.N.C.E. Pt. 2', 'DVNO', 'Waters Of Nazareth (Prelude)', 'One Minute To Midnight', 'TTHHEE PPAARRTTYY', 'Let There Be Lite', 'Stress', 'We Are Your Friends (Reprise)', 'Waters of Nazareth', 'Phantom Pt. 2', 'Encore', 'NY Excuse', 'Final'] },
+                { nombre: 'Audio, Video, Disco', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02f9171c2b7bab0956cdfbd1fa', canciones: ['Horsepower', 'Civilization', 'Ohio!', 'Canon (Primo)', 'Canon', 'On´n´On', 'Brianvision', 'Parade', 'New Lands', 'Helix', 'Audio, Video, Disco'] },
+                { nombre: 'Access All Arenas', precio: 35.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02ad204ee072a9c368f92a1a45', canciones: ['Genesis', 'Helix', 'Phantom', 'Civilization', 'Canon', 'D.A.N.C.E. (Piano Intro)', 'Horsepower', 'New Lands', 'Stress', 'Waters of Nazareth', 'Audio, Video, Disco', 'Encore', 'On´n´On', 'Phantom Pt. II (Outro)'] },
+                { nombre: 'Woman', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02d4a2f9a24620e329d2db7078', canciones: ['Safe and Sound', 'Pleasure', 'Alakazam!', 'Fire', 'Stop', 'Chorus', 'Randy', 'Heavy Metal', 'Love S.O.S.', 'Close Call'] },
+                { nombre: 'Hyperdrama', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e028f4b5df3a6ee2abb733080a9', canciones: ['Neverender', 'Generator', 'Afterimage!', 'One Night/All Night', 'Dear Alan', 'Incognito', 'Mannequin Love', 'Moonlight Rendez-vous', 'Explorer', 'Muscle Memory', 'Harpy Dream', 'Saturnine', 'The End'] },
+            ],
+            'Red Hot Chili Peppers': [
+                { nombre: 'Red Hot Chili Peppers', precio: 15.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0229e7d4966ce2ec927224b730', canciones: ['True Men Don´t Kill Coyotes', 'Baby Appeal', 'Buckle Down', 'Get Up and Jump', 'Why Don´t You Love Me', 'Green Heaven', 'Mommy, Where´s Daddy?', 'Out in L.A.', 'Police Helicopter', 'You Always Sing the Same', 'Grand Pappy Du Plenty'] },
+                { nombre: 'Freaky Styley', precio: 15.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02d95ea73fb482cde5129fe739', canciones: ['Jungle Man', 'Hollywood (Africa)', 'American Ghost Dance', 'If You Want Me to Stay', 'Nevermind', 'Freaky Styley', 'Blackeyed Blonde', 'The Brothers Cup', 'Battleship', 'Lovin´ and Touchin', 'Catholic School Girls Rule', 'Sex Rap', 'Thirty Dirty Birds', 'Yertle the Turtle' ] },
+                { nombre: 'The Uplift Mofo Party Plan', precio: 15.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02ef0aaa5b8cd65ec81d22b3d9', canciones: ['Fight Like a Brave', 'Funky Crime', 'Me and My Friends', 'Backwoods', 'Skinny Sweaty Man', 'Behind the Sun', 'Subterranean Homesick Blues', 'Special Secret Song Inside', 'No Chump Love Sucker', 'Walkin´ on Down the Road', 'Love Trilogy', 'Organic Anti-Beat Box Band'] },
+                { nombre: 'Mother´s Milk', precio: 25.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0279ac84696fa8624e97684d27', canciones: ['Good Time Boys', 'Higher Ground', 'Subway to Venus', 'Magic Johnson', 'Nobody Weird Like Me', 'Knock Me Down', 'Taste the Pain', 'Stone Cold Bush', 'Fire', 'Pretty Little Ditty', 'Punk Rock Classic', 'Sexy Mexican Maid', 'Johnny, Kick a Hole in the Sky'] },
+                { nombre: 'Blood Sugar Sex Magik', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02153d79816d853f2694b2cc70', canciones: ['The Power of Equality', 'If You Have to Ask', 'Breaking the Girl', 'Funky Monks', 'Suck My Kiss', 'I Could Have Lied', 'Mellowship Slinky in B Major', 'The Righteous & the Wicked', 'Give It Away', 'Blood Sugar Sex Magik', 'Under the Bridge', 'Naked in the Rain', 'Apache Rose Peacock', 'The Greeting Song', 'My Lovely Man', 'Sir Psycho Sexy', 'They´re Red Hot' ] },
+                { nombre: 'One Hot Minute', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0284b9d450917fbae37b2e3d91', canciones: ['Warped', 'Aeroplane', 'Deep Kick', 'My Friends', 'Coffee Shop', 'Pea', 'One Big Mob', 'Walkabout', 'Tearjerker', 'One Hot Minute', 'Falling into Grace', 'Shallow Be Thy Game', 'Transcending'] },
+                { nombre: 'Californication', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02a9249ebb15ca7a5b75f16a90', canciones: ['Around the World', 'Parallel Universe', 'Scar Tissue', 'Otherside', 'Get on Top', 'Californication', 'Easily', 'Porcelain', 'Emit Remmus', 'I Like Dirt', 'This Velvet Glove', 'Savior', 'Purple Stain', 'Right on Time', 'Road Trippin´' ] },
+                { nombre: 'By The Way', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02fdbcee40748537ff80a7af70', canciones: ['By the Way', 'Universally Speaking', 'This Is the Place', 'Dosed', 'Don´t Forget Me', 'The Zephyr Song', 'Can´t Stop', 'I Could Die for You', 'Midnight', 'Throw Away Your Television', 'Cabron', 'Tear', 'On Mercury', 'Minor Thing', 'Warm Tape', 'Venice Queen'] },
+                { nombre: 'Stadium Arcadium', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0209fd83d32aee93dceba78517', canciones: ['Dani California', 'Snow (Hey Oh)', 'Charlie', 'Stadium Arcadium', 'Hump de Bump', 'She´s Only 18', 'Slow Cheetah', 'Torture Me', 'Strip My Mind', 'Especially in Michigan', 'Warlocks', 'C´mon Girl', 'Wet Sand', 'Hey', 'Desecration Smile', 'Tell Me Baby', 'Hard to Concentrate', '21st Century', 'She Looks to Me', 'Readymade', 'If', 'Make You Feel Better', 'Animal Bar', 'So Much I', 'Storm in a Teacup', 'We Believe', 'Turn It Again', 'Death of a Martian'] },
+                { nombre: 'I´m With You', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0296136a2ab5696812e9b26723', canciones: ['Monarchy of Roses', 'Factory of Faith', 'Brendan´s Death Song', 'Ethiopia', 'Annie Wants a Baby', 'Look Around', 'The Adventures of Rain Dance Maggie', 'Did I Let You Know', 'Goodbye Hooray', 'Happiness Loves Company', 'Police Station', 'Even You Brutus?', 'Meet Me at the Corner', 'Dance, Dance, Dance'] },
+                { nombre: 'The Getaway', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0258406b3f1ac3ceaff7a64fef', canciones: ['The Getaway', 'Dark Necessities', 'We Turn Red', 'The Longest Wave', 'Goodbye Angels', 'Sick Love', 'Go Robot', 'Feasting on the Flowers', 'Detroit', 'This Ticonderoga', 'Encore', 'The Hunter', 'Dreams of a Samurai'] },
+                { nombre: 'Unlimited Love', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0297a52e0aeda9d95fb881c56d', canciones: ['Black Summer', 'Here Ever After', 'Aquatic Mouth Dance', 'Not the One', 'Poster Child', 'The Great Apes', 'It´s Only Natural', 'She´s a Lover', 'These Are the Ways', 'Whatchu Thinkin´', 'Bastards of Light', 'White Braids & Pillow Chair', 'One Way Traffic', 'Veronica', 'Let ´Em Cry', 'The Heavy Wing', 'Tangelo'] },
+                { nombre: 'Return of the Dream Canteen', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02aa50644f05f26e73ba950b8c', canciones: ['Tippa My Tongue', 'Peace and Love', 'Reach Out', 'Eddie', 'Fake as Fu@k', 'Bella', 'Roulette', 'My Cigarette', 'Afterlife', 'Shoot Me a Smile', 'Handful', 'The Drummer', 'Bag of Grins', 'La La La La La La La La', 'Copperbelly', 'Carry Me Home', 'In the Snow'] }, 
+            ],
+            'Travis Scott': [
+                { nombre: 'Rodeo', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02715973050587fe3c93033aad', canciones: ['Pornography', 'Oh My Dis Side', '3500', 'Wasted', '90210', 'Pray 4 Love', 'Nightcrawler', 'Piss On Your Grave', 'Antidote', 'Impossible', 'Maria I´m Drunk', 'Flying High', 'I Can Tell', 'Apple Pie', 'Ok Alright', 'Never Catch me'] },
+                { nombre: 'Birds in the Trap Sing Mcknight', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02f54b99bf27cda88f4a7403ce', canciones: ['The Ends', 'Way Back', 'Coordinate', 'Throught The Late Night', 'Beibs In The Trap', 'SDP Interlude', 'Sweet Sweet', 'Outside', 'Goosebumps', 'First Take', 'Pick Up The Phone', 'Lose', 'Guidance', 'Wonderful' ] },
+                { nombre: 'Huncho Jack, Jack Huncho', precio: 15.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02631973893e94d01cfcdf0e5e', canciones: ['Modern Slavery', 'Black & Chinese', 'Eye 2 Eye', 'Motorcycle Patches', 'Huncho Jack', 'Saint', 'Go', 'Dubai Shit', 'Saint Laurent Mask', 'Moon Rock', 'How U Feel', 'Where U From', 'Best Man'] },
+                { nombre: 'ASTROWORLD', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02072e9faef2ef7b6db63834a3', canciones: ['The Power of Equality', 'Sicko Mode', 'Carusel', 'R.I.P. Screw', 'Stop Trying to Be God', 'No Bystanders', 'Skeletons', 'Wake Up', '5% Tint', 'NC-17', 'Astrothunder', 'Yosemite', 'Can´t Say', 'Who? What!', 'Butterfly Effect', 'Houstonfornication', 'Coffee Bean'] },
+                { nombre: 'UTOPIA', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02881d8d8378cd01099babcd44', canciones: ['Hyaena', 'Thank God', 'Modern Jam', 'My Eyes', 'God´s Country', 'Sirens', 'Meltdown', 'Fe!n', 'Delresto (Echoes)', 'I Know?', 'Topia Twins', 'Circus Maximus', 'Parasail', 'Skitzo', 'Lost Forever', 'Looove', 'K Pop', 'Telekinesis', 'Til Further Notice' ] },
+            ],
+            'MF DOOM': [
+                { nombre: 'Operation: Doomsday', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e026ce90ec627a0198a8efd127f', canciones: ['The Time We Faced DOOM', 'Doomsday', 'Rhymes Like Dimes', 'The Finest', 'Back in the Days', 'Go with the Flow', 'Tick, Tick…', 'Red and Gold', 'The Hands of DOOM', 'Who You Think I Am?', 'DOOM, Are You Awake?', 'Hey!', 'Operation: Greenbacks', 'The Mic', 'The Mystery of DOOM', 'Dead Bent', 'Gas Drawls', '?', 'Hero vs. Villain (Epilogue)'] },
+                { nombre: 'Take Me To Your Leader', precio: 25.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02c54028b0ef2f2f569fb3df42', canciones: ['Fazers', 'Fastlane', 'Krazy World', 'The Final Hour', 'Monster Zero', 'Next Levels', 'No Snakes Alive', 'Anti-Matter', 'Take Me To Your Leader', 'Lockjaw', 'I Wonder', 'One Smart Nigger', 'The Fine Print'] },
+                { nombre: 'Vaudeville Villain', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02d97a55d6ace2bf9e8ccb8cb1', canciones: ['Overture', 'Vaudeville Villain', 'Lickupon', 'The Drop', 'Lactose and Lecithin', 'A Dead Mouse', 'Open Mic Nite, Pt. 1', 'Raedawn', 'Can I Watch?', 'Saliva', 'A Modern Day Mugging', 'Open Mic Nite, Pt. 2', 'Popsnot', 'Mr. Clean', 'G.M.C', 'Untitled A.K.A. Change the Beat'] },
+                { nombre: 'Madvillain', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0274dc897ea75402db37ef239a', canciones: ['The Illest Villains', 'Accordion', 'Meat Grinder', 'Bistro', 'Raid', 'America´s Most Blunted', 'Sickfit', 'Rainbows', 'Curls', 'Do Not Fire!', 'Money Folder', 'Shadows of Tomorrow', 'Operation Lifesaver', 'Figaro', 'Hardcore Hustle', 'Strange Ways', 'Fancy Clown', 'Eye', 'Supervillain Theme', 'All Caps', 'Great Day', 'Rhinestone Cowboy'] },
+                { nombre: 'MM... FOOD', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0252f194d02c39909d1b284799', canciones: ['Beef Rap', 'Hoe Cakes', 'Potholderz', 'One Beer', 'Deep Fried Frenz', 'Poo-Putt Platter', 'Fillet-O-Rapper', 'Gumbo', 'Fig Leaf Bi-Carbonate', 'Kon Karne', 'Guinnesses', 'Kon Queso', 'Rapp Snitch Knishes', 'Vomitspit', 'Kookies'] },
+                { nombre: 'The Mouse & The Mask', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e026c3fb85147fcf2972923cf2d', canciones: ['El Chupa Nibre', 'Sofa King', 'The Mask', 'Perfect Hair', 'Benzi Box', 'Old School Rules', 'A.T.H.F (Aquia Teen Hunger Force)', 'Basket Case', 'No Names', 'Crosshairs', 'Mince Meat', 'Vats of Urine', 'Space Hos', 'Bada Bing', 'Sofa King', 'Space Ho´s'] },
+                { nombre: 'Born Like This', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0273fcd3730311f6ec3a4326dd', canciones: ['Supervillain (Intro)', 'Gazzillion Ear', 'Ballskin', 'Yessir!', 'Absolutely', 'Rap Ambush', 'Lightworks', 'Batty Boyz', 'Angelz', 'Cellz', 'Still Dope', 'Microwave Mayo', 'More Rhymin', 'That´s That', 'Supervillainz', 'Bumpy´s Message', 'Thank Ya', 'The.Green.Whore.Net'] },
+                { nombre: 'Key to the Kuffs', precio: 45.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0201a16ebdeb383059af0784b8', canciones: ['Waterlogged', 'Guv´nor', 'Banished', 'Bite the Thong', 'Rhymin Slang', 'Dawg Friendly', 'Borin Convo', 'Snatch That Dough', 'GMO', 'Bout the Shoes', 'Winter Blues', 'Still Kaps', 'Retarded Fren', 'Viberian Sun, Pt. 2', 'Wash Your Hands'] },
+                { nombre: 'Bookhead', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02417982c671fe96b667a39e2e', canciones: ['Bookhead', 'Pause Tape', 'The Signs', 'Viberian Son', 'Rhymin Slang', 'Guv´nor', 'Retarded Fren', 'Bookfiend', 'Banished'] },
+                { nombre: 'Czarface Meets Metal Face', precio: 45.99, imagen: 'https://i.scdn.co/image/ab67616d00001e026bc240551be44f15bb2bf596', canciones: ['Take Your Medicine', 'Meddle with Metal', 'Badness of Madness', 'Close Talker', 'Forever People', 'Captain Crunch', 'Don´t Spoil It', 'Phantoms', 'Bomb Thrown', 'You Masked for It', 'Astral Traveling', 'Nautical Depth', 'Stun Gun', 'MF Czar', 'Captain Brunch', 'Sleeping Dogs'] },
+                { nombre: 'NEHRUVIANDOOM', precio: 45.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02c5163537d96a2024c9393913', canciones: ['First Day of Class', 'Om', 'Omterlude, Pt.1', 'Mean the Most', 'Omterlude, Pt.2', 'So Alone', 'Coming for You', 'Darkness', 'Caskets', 'Great Things', 'Disastrous'] },
+                { nombre: 'Super What?', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02c81512cf4ad12711299b94ea', canciones: ['The King and Eye', 'Czarwyn´s Theory of People Getting Loose', 'Mando Calrissian', 'DOOM Unto Others', 'Jason % The Czargonauts', 'Break in the Action', 'A Name to the Face', 'This is Canon Now', 'So Strange', 'Young World'] },
+            ],
+            'YE': [
+                { nombre: 'The College Drop Out', precio: 30.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0225b055377757b3cdd6f26b78', canciones: ['Intro (Skit)', 'We Don´t Care', 'Graduation Day', 'All Falls Down', 'I´ll Fly Away"', 'Spaceship', 'Jesus Walks', 'Never Let Me Down', 'Get Em High', 'Workout Plan (Skit)', 'The New Workout Plan', 'Slow Jamz', 'Breathe In Breathe Out', 'School Spirit (Skit 1)', 'School Spirit', 'School Spirit (Skit 2)', 'Lil Jimmy (Skit)', 'Two Words', 'Through the Wire', 'Family Business', 'Last Call'] },
+                { nombre: 'Late Registration', precio: 40.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02428d2255141c2119409a31b2', canciones: ['Wake Up Mr. West', 'Heard ´Em Say', 'Touch the Sky', 'Gold Digger', 'Skit No. 1', 'Drive Slow', 'My Way Home', 'Crack Music', 'Roses', 'Bring Me Down', 'Addiction', 'Skit No. 2', 'Diamonds from Sierra Leone (Remix)', 'We Major', 'Skit No. 3', 'Hey Mama', 'Celebration', 'Skit No. 4', 'Gone', 'Diamonds from Sierra Leone', 'Late' ] },
+                { nombre: 'Late Orchestration', precio: 35.99, imagen: 'https://i.scdn.co/image/ab67616d00001e025f2235cb0deb07e74bf6a31d', canciones: ['Diamonds from Sierra Leone', 'Touch the Sky', 'Crack Music', 'Drive Slow', 'Through the Wire', 'The New Workout Plan', 'Heard ´Em Say', 'All Falls Down', 'Bring Me Down', 'Gone', 'Late', 'Jesus Walks', 'Gold Digger (AOL Sessions)'] },
+                { nombre: 'Graduation', precio: 45.99, imagen: 'https://i.scdn.co/image/ab67616d00001e0226f7f19c7f0381e56156c94a', canciones: ['Good Morning', 'Champion', 'Stronger', 'I Wonder', 'Good Life', 'Can´t Tell Me Nothing', 'Barry Bonds', 'Drunk and Hot Girls', 'Flashing Lights', 'Everything I Am', 'The Glory', 'Homecoming', 'Big Brother', 'Good Night'] },
+                { nombre: '808s & Heartbreak', precio: 35.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02346d77e155d854735410ed18', canciones: ['Say You Will', 'Welcome to Heartbreak', 'Heartless', 'Amazing', 'Love Lockdown', 'Paranoid', 'RoboCop', 'Street Lights', 'Bad News', 'See You in My Nightmares', 'Coldest Winter', 'Pinocchio Story'] },
+                { nombre: 'My Beautiful Dark Twisted Fantasy', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02d9194aa18fa4c9362b47464f', canciones: ['Dark Fantasy', 'Gorgeous', 'Power', 'All of the Lights (Interlude)', 'All of the Lights', 'Monster', 'So Appalled', 'Devil in a New Dress', 'Runaway', 'Hell of a Life', 'Blame Game', 'Lost in the World', 'Who Will Survive in America'] },
+                { nombre: 'Yeezus', precio: 25.99, imagen: 'https://i.scdn.co/image/ab67616d00001e021dacfbc31cc873d132958af9', canciones: ['On Sight', 'Black Skinhead', 'I Am a God', 'New Slaves', 'Hold My Liquor', 'I´m in It', 'Blood on the Leaves', 'Guilt Trip', 'Send It Up', 'Bound 2' ] },
+                { nombre: 'The Life Of Pablo', precio: 35.99, imagen: 'https://i.scdn.co/image/ab67616d00001e022a7db835b912dc5014bd37f4', canciones: ['Ultralight Beam', 'Father Stretch My Hands, Pt. 1', 'Pt. 2', 'Famous', 'Feedback', 'Low Lights', 'Highlights', 'Freestyle 4', 'I Love Kanye', 'Waves', 'FML', 'Real Friends', 'Wolves', 'Frank´s Track', 'Siiiiiiiiilver Surffffeeeeer Intermission', '30 Hours', 'No More Parties in LA', 'Facts (Charlie Heat Version)', 'Fade', 'Saint Pablo'] },
+                { nombre: 'YE', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e020cd942c1a864afa4e92d04f2', canciones: ['I Thought About Killing You', 'Yikes', 'All Mine', 'Wouldn´t Leave', 'No Mistakes', 'Ghost Town', 'Violent Crimes'] },
+                { nombre: 'Kids See Ghosts', precio: 50.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02013c00ee367dd85396f79c82', canciones: ['Feel the Love', 'Fire', '4th Dimension', 'Freeee (Ghost Town, Pt. 2)', 'Reborn', 'Kids See Ghosts', 'Cudi Montage' ] },
+                { nombre: 'Jesus Is King', precio: 20.99, imagen: 'https://i.scdn.co/image/ab67616d00001e021bb797bbfe2480650b6c2964', canciones: ['Every Hour', 'Selah', 'Follow God', 'Closed on Sunday', 'On God', 'Everything We Need', 'Water', 'God Is', 'Hands On', 'Use This Gospel', 'Jesus Is Lord'] },
+                { nombre: 'Donda', precio: 45.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02cad190f1a73c024e5a40dddd', canciones: ['Donda Chant', 'Jail', 'God Breathed', 'Off the Grid', 'Hurricane', 'Praise God', 'Jonah', 'Ok Ok', 'Junya', 'Believe What I Say', '24', 'Remote Control', 'Moon', 'Heaven and Hell', 'Donda', 'Keep My Spirit Alive', 'Jesus Lord', 'New Again', 'Tell the Vision', 'Lord I Need You', 'Pure Souls', 'Come to Life', 'No Child Left Behind', 'Jail Pt. 2', 'Ok Ok Pt. 2', 'Junya Pt. 2', 'Jesus Lord Pt. 2' ] },
+                { nombre: 'Vultures 1', precio: 55.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02b2e4a1ea8a6708fc23f26e4a', canciones: ['Stars', 'Keys to My Life', 'Paid', 'Talking', 'Back to Me', 'Hoodrat', 'Do It', 'Paperwork', 'Burn', 'Fuk Sumn', 'Vultures', 'Carnival', 'Beg Forgiveness', 'Good (Don´t Die)', 'Problematic', 'King' ] },
+                { nombre: 'Vultures 2', precio: 55.99, imagen: 'https://i.scdn.co/image/ab67616d00001e02a2b4b9962756bbbbab374cc5', canciones: ['Slide', 'Time Moving Slow', 'Field Trip', 'Fried', 'Isabella', 'Promotion', 'Husband', 'Lifestyle', 'Maybe', 'Bomb', 'River', '530', 'Dead', 'Forever Rolling', 'Sky City', 'My Soul' ] },
+            ],
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+            const botonesArtistas = document.querySelectorAll('.Artista-Btn');
+            botonesArtistas.forEach(boton => {
+                boton.addEventListener('click', mostrarDiscografia);
+            });
+            const botonesAgregarCarrito = document.querySelectorAll('.agregar-carrito');
+            botonesAgregarCarrito.forEach(boton => {
+                boton.addEventListener('click', agregarAlCarrito);
+            });
+            document.getElementById('Limpiar-Carrito').addEventListener('click', LimpiarCarrito);
+        });
+        function mostrarDiscografia(event) {
+            const artista = event.target.getAttribute('data-artista');
+            const discografia = discografias[artista];
+            const contenedorDiscografia = document.getElementById('Discografia');
+            contenedorDiscografia.innerHTML = '';
+            discografia.forEach(album => {
+                const albumDiv = document.createElement('div');
+                albumDiv.classList.add('album');
+                const listaCanciones = album.canciones.map(cancion => `<li>${cancion}</li>`).join('');
+                albumDiv.innerHTML = `
+                    <img src="${album.imagen}" alt="${album.nombre}">
+                    <h3>${album.nombre}</h3>
+                    <h3>Lista de canciones</h3>
+                    <ul>${listaCanciones}</ul>
+                    <p>$${album.precio.toFixed(2)}</p>
+                    <button class="agregar-carrito" onclick="agregarAlCarritoDesdeBoton('${artista}', '${album.nombre}')">Agregar al Carrito</button>
+                `;
+                contenedorDiscografia.appendChild(albumDiv);
+            });
+            document.getElementById('Discografia-Contenido').classList.remove('hidden');
+        }
+        function CerrarDiscografia() {
+            document.getElementById('Discografia-Contenido').classList.add('hidden');
+        }
+        function CerrarCarrito() {
+            document.getElementById('Carrito-Contenido').classList.add('hidden');
+        }
+        function agregarAlCarritoDesdeBoton(artista, nombreAlbum) {
+            const album = discografias[artista].find(a => a.nombre === nombreAlbum);
+            agregarAlCarrito(album, artista);
+            Swal.fire({
+                title: '¡Producto agregado al carrito!',
+                text: `${album.nombre} de ${artista} ha sido añadido.`,
+                icon: 'success',
+                toast: true,
+                position: 'top-start',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true
+            });
+        }
+        function agregarAlCarrito(album, artista) {
+            const AlbumExistente = carrito.find(item => item.album.nombre === album.nombre);
+            if (AlbumExistente) {
+                AlbumExistente.cantidad++;
+            } else {
+                carrito.push({ album, cantidad: 1, artista });
+            }
+            ActualizarCarrito();
+        }
+        function ActualizarCarrito() {
+            const CarritoContenido = document.querySelector('#Tabla-Carrito tbody');
+            CarritoContenido.innerHTML = '';
+            let total = 0;
+            carrito.forEach(item => {
+                const subtotal = item.album.precio * item.cantidad;
+                total += subtotal;
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td><img src="${item.album.imagen}" alt="${item.album.nombre}" style="width: 50px; height: 50px;"></td>
+                    <td>${item.album.nombre}</td>
+                    <td>${item.artista}</td>
+                    <td>$${item.album.precio.toFixed(2)}</td>
+                    <td>
+                        <button class="cantidad-btn" onclick="DisminuirCantidad('${item.album.nombre}')">-</button>
+                        ${item.cantidad}
+                        <button class="cantidad-btn" onclick="AumentarCantidad('${item.album.nombre}')">+</button>
+                    </td>
+                    <td>$${subtotal.toFixed(2)}</td>
+                    <td><button class="eliminar-btn" onclick="EliminarDelCarrito('${item.album.nombre}')">Eliminar</button></td>
+                `;
+                CarritoContenido.appendChild(fila);
+            });
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('carrito-count').textContent = carrito.length;
+        }
+        function DisminuirCantidad(NombreAlbum) {
+            const item = carrito.find(item => item.album.nombre === NombreAlbum);
+            if (item) {
+                item.cantidad--;
+                if (item.cantidad <= 0) {
+                    EliminarDelCarrito(NombreAlbum);
+                } else {
+                    ActualizarCarrito();
+                }
+            }
+        }
+        function AumentarCantidad(nombreAlbum) {
+            const item = carrito.find(item => item.album.nombre === nombreAlbum);
+            if (item) {
+                item.cantidad++;
+                ActualizarCarrito();
+            }
+        }
+        function EliminarDelCarrito(nombreAlbum) {
+            const index = carrito.findIndex(item => item.album.nombre === nombreAlbum);
+            if (index !== -1) {
+                carrito.splice(index, 1);
+            }
+            ActualizarCarrito();
+        }
+        function LimpiarCarrito() {
+            carrito.length = 0;
+            ActualizarCarrito();
+        }
+        function MostrarCarrito() {
+            document.getElementById('Carrito-Contenido').classList.remove('hidden');
+        }
+        document.getElementById('Carrito-Btn').addEventListener('click', MostrarCarrito);
+    </script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+                background-color: #333;
+                color: white;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+            }
+            #Carrito {
+                position: relative;
+            }
+            #Carrito-Btn {
+                background-color: #444;
+                color: white;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                position: relative;
+            }
+            #carrito-count {
+                background-color: red;
+                color: white;
+                border-radius: 50%;
+                padding: 5px 10px;
+                position: absolute;
+                top: -10px;
+                right: -10px;
+            }
+            #Carrito-Contenido{
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                color: black;
+                border: 1px solid #ccc;
+                width: 90%;
+                max-height: 80%;
+                overflow-y: auto;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                z-index: 2000;
+            }
+            #Precio-Total{
+                color: #28a745;
+                background-color: #333;
+                width: 50%;
+                margin-left: 25%;
+                display: grid;
+                justify-items: center;
+                font-family: serif;
+                font-size: x-large;
+            }
+            #Discografia-Contenido {
+                position: fixed;
+                top: 50%;
+                left: 55%;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                color: black;
+                border: 1px solid #ccc;
+                width: 50%;
+                max-height: 80%;
+                overflow-y: auto;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                z-index: 2000;
+            }
+            #Limpiar-Carrito {
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                padding: 10px;
+                width: 100%;
+                cursor: pointer;
+                margin-top: 10px;
+                display: inline-block;
+            }
+            .Cerrar {
+                position: sticky;
+                top: 0%;
+                margin-left: 98%;
+                background-color: rgb(0, 0, 0);
+                border-radius: 5px;
+                color: #dc3545;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+            }
+            .hidden {
+                display: none;
+            }
+            main {
+                padding: 20px;
+                margin-top: 20px;
+            }
+            #Artistas {
+                margin-top: 10%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+            }
+            .Artista-Card {
+                display: grid;
+                align-items: center;
+                justify-content: center;
+                justify-content: space-between;
+                justify-items: center;
+                background-color: #f4f4f4;
+                border: 1px solid #ddd;
+                padding: 10px;
+                width: 200px;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .Artista-Card img {
+                max-width: 100%;
+                height: auto;
+                object-fit: cover;
+            }
+            .Artista-Btn {
+                background-color: #444;
+                color: white;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+            .Tabla {
+                display: grid;
+                padding: 10px;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }
+            .album {
+                justify-content: space-between;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 20px;
+                padding: 10px;
+                border: 1px solid #ccc;
+            }
+            .album img {
+                max-width: 100%;
+                height: auto;
+                object-fit: cover;
+            }
+            .album button {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+            .album p {
+                margin: 10px 0 0;
+                font-size: 16px;
+                color: #333;
+            }
+            #Tabla-Carrito {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            #Tabla-Carrito th,
+            #Tabla-Carrito td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+            }
+            #Tabla-Carrito th {
+                background-color: #f4f4f4;
+            }
+            .cantidad-btn {
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+                margin: 0 2px;
+            }
+            .eliminar-btn {
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+            #Discografia {
+                display: grid;
+                padding: 10px;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }
+            .album-card {
+                text-align: center;
+            }
+            .agregar-carrito {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+            #Info-Contacto {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                background-color: #333;
+                color: white;
+                padding: 20px;
+                margin-top: 20px;
+                border-radius: 5px;
+                text-align: center;
+            }
+            #Info-Contacto h2, #Info-Contacto h3 {
+                color: #f4f4f4;
+            }
+            #Info-Contacto p, #Info-Contacto ul {
+                color: #ddd;
+            }
+            #Info-Contacto ul {
+                list-style-type: none;
+                padding: 0;
+            }
+            #Info-Contacto li {
+                margin: 5px 0;
+            }
+        </style>
+</body>
+</html>
